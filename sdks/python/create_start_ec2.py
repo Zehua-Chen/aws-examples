@@ -3,13 +3,14 @@
 import boto3
 # import requests
 import time
+import os
 
 
-def create_sg(sgName, sgDesc):
-    ec2 = boto3.client('ec2')
+def create_sg(session: boto3.Session, sg_name, sg_desc):
+    ec2 = session.client('ec2', region_name="us-east-1")
     res = ec2.create_security_group(
-        GroupName=sgName,
-        Description=sgDesc
+        GroupName=sg_name,
+        Description=sg_desc
     )
     res2 = ec2.authorize_security_group_ingress(
         GroupId=res["GroupId"],
@@ -55,11 +56,15 @@ def create_ec2(amiId, keyName, sgName, instType='t1.micro', minInst=1, maxInst=1
 
 
 if __name__ == '__main__':
-    sgName = 'securityGroupForDemo'
-    sgDesc = 'This is a security group for demo'
-    keyName = 'demo-key'
-    amiId = 'ami-06b263d6ceff0b3dd'
+    sg_name = 'securityGroupForDemo'
+    sg_desc = 'This is a security group for demo'
+    key_name = 'demo-key'
+    ami_id = 'ami-06b263d6ceff0b3dd'
 
-    create_sg(sgName, sgDesc)
-    create_key_pair(keyName)
-    create_ec2(amiId, keyName, sgName)
+    session = boto3.Session(
+        aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
+        aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"])
+
+    create_sg(session, sg_name, sg_desc)
+    create_key_pair(key_name)
+    create_ec2(ami_id, key_name, sg_name)
