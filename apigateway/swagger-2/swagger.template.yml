@@ -1,0 +1,82 @@
+swagger: '2.0'
+info:
+  title: Echo API
+  description: 'Echo'
+  version: 1.0.0
+schemes:
+  - https
+basePath: /v1
+produces:
+  - application/json
+paths:
+  /echo:
+    options:
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      tags:
+        - CORS
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: |
+            {
+              "statusCode" : 200
+            }
+        responses:
+          'default':
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: |
+                {}
+      responses:
+        200:
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Headers:
+              type: 'string'
+            Access-Control-Allow-Methods:
+              type: 'string'
+            Access-Control-Allow-Origin:
+              type: 'string'
+    post:
+      summary: The endpoint for the echo API
+      description: |
+        This API returns the an echo to the request
+      operationId: sendMessage
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/EchoRequest'
+      responses:
+        '200':
+          description: A Chatbot response
+          schema:
+            $ref: '#/definitions/EchoResponse'
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: POST
+        uri: arn:aws:apigateway:${vars.region}:lambda:path/2015-03-31/functions/${vars.echo_lambda}/invocations
+definitions:
+  EchoRequest:
+    type: object
+    properties:
+      message:
+        type: string
+  EchoResponse:
+    type: object
+    properties:
+      message:
+        type: string
