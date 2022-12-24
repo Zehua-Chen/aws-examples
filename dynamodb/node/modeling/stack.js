@@ -47,6 +47,20 @@ class ShoppingCarts extends Construct {
 
     users.grantWriteData(populateTables);
     items.grantWriteData(populateTables);
+
+    const buy = new lambda.Function(this, 'Buy', {
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: 'index.handler',
+      code: lambda.Code.fromAsset(path.join('carts', 'buy')),
+      environment: {
+        USERS_TABLE: users.tableName,
+        ITEMS_TABLE: items.tableName,
+        ITEMS_BY_USERNAME_INDEX: 'ByUserName',
+      },
+    });
+
+    users.grantReadData(buy);
+    items.grantReadData(buy);
   }
 }
 
