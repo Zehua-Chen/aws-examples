@@ -26,7 +26,7 @@ const client = new DynamoDBClient({});
  */
 async function addUser(user) {
   const command = new PutItemCommand({
-    TableName: itemsTable,
+    TableName: usersTable,
     Item: {
       UserName: {
         S: user.userName,
