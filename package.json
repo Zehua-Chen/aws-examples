@@ -1,0 +1,10 @@
+{
+  "name": "aws-examples",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.109",
+    "@types/node": "^18.11.17",
+    "aws-cdk-lib": "^2.56.0",
+    "constructs": "^10.1.198",
+    "typescript": "^4.9.4"
+  }
+}

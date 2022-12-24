@@ -1,0 +1,10 @@
+{
+  "name": "dynamodb-modeling",
+  "type": "module",
+  "scripts": {
+    "synth": "cdk synth"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.238.0"
+  }
+}
