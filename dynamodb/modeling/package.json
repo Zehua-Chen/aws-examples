@@ -1,6 +1,5 @@
 {
   "name": "dynamodb-modeling",
-  "type": "module",
   "scripts": {
     "synth": "cdk synth"
   },

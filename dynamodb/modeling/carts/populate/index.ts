@@ -1,30 +1,22 @@
-//@ts-check
 import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
 
 const usersTable = process.env['USERS_TABLE'];
 const itemsTable = process.env['ITEMS_TABLE'];
 const client = new DynamoDBClient({});
 
-/**
- * @typedef {{
- *  userName: string,
- *  paymentMethod: string
- * }} User
- */
+interface User {
+  userName: string;
+  paymentMethod: string;
+}
 
-/**
- * @typedef {{
- *  purchaseID: string,
- *  itemName: string,
- *  count: number,
- *  userName: string
- * }} Item
- */
+interface Item {
+  purchaseID: string;
+  itemName: string;
+  count: number;
+  userName: string;
+}
 
-/**
- * @param {User} user
- */
-async function addUser(user) {
+async function addUser(user: User) {
   const command = new PutItemCommand({
     TableName: usersTable,
     Item: {
@@ -40,10 +32,7 @@ async function addUser(user) {
   await client.send(command);
 }
 
-/**
- * @param {Item} item
- */
-async function addItem(item) {
+async function addItem(item: Item) {
   const command = new PutItemCommand({
     TableName: itemsTable,
     Item: {
@@ -65,12 +54,7 @@ async function addItem(item) {
   await client.send(command);
 }
 
-/**
- *
- * @param {unknown} event
- * @returns {Promise<unknown>}
- */
-export async function handler(event) {
+export async function handler(event: unknown) {
   await addUser({ userName: 'peter', paymentMethod: 'Paypal' });
   await addUser({ userName: 'jackson', paymentMethod: 'Visa' });
 

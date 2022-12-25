@@ -1,4 +1,3 @@
-//@ts-check
 import { Construct } from 'constructs';
 import {
   App,
@@ -9,12 +8,7 @@ import {
 import * as path from 'path';
 
 class ShoppingCarts extends Construct {
-  /**
-   *
-   * @param {Construct} scope
-   * @param {string} id
-   */
-  constructor(scope, id) {
+  constructor(scope: Construct, id: string) {
     super(scope, id);
 
     const users = new dynamodb.Table(this, 'Users', {
@@ -38,7 +32,7 @@ class ShoppingCarts extends Construct {
     const populateTables = new lambda.Function(this, 'PopulateTables', {
       runtime: lambda.Runtime.NODEJS_18_X,
       handler: 'index.handler',
-      code: lambda.Code.fromAsset(path.join('carts', 'populate')),
+      code: lambda.Code.fromAsset(path.join('out', 'carts', 'populate')),
       environment: {
         USERS_TABLE: users.tableName,
         ITEMS_TABLE: items.tableName,
@@ -51,7 +45,7 @@ class ShoppingCarts extends Construct {
     const buy = new lambda.Function(this, 'Buy', {
       runtime: lambda.Runtime.NODEJS_18_X,
       handler: 'index.handler',
-      code: lambda.Code.fromAsset(path.join('carts', 'buy')),
+      code: lambda.Code.fromAsset(path.join('out', 'carts', 'buy')),
       environment: {
         USERS_TABLE: users.tableName,
         ITEMS_TABLE: items.tableName,
@@ -64,13 +58,8 @@ class ShoppingCarts extends Construct {
   }
 }
 
-export class DynamoDBNodeJSModeling extends Stack {
-  /**
-   *
-   * @param {Construct} scope
-   * @param {string} id
-   */
-  constructor(scope, id) {
+export class DynamoDBModeling extends Stack {
+  constructor(scope: Construct, id: string) {
     super(scope, id);
 
     new ShoppingCarts(this, 'ShoppingCarts');
@@ -78,6 +67,6 @@ export class DynamoDBNodeJSModeling extends Stack {
 }
 
 const app = new App();
-new DynamoDBNodeJSModeling(app, 'DynamoDBNodeJSModeling');
+new DynamoDBModeling(app, 'DynamoDBModeling');
 
 app.synth();

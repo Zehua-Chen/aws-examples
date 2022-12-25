@@ -1,2 +1,2 @@
 packages:
-  - 'dynamodb/node/**'
+  - 'dynamodb/**'

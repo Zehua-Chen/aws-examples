@@ -1,0 +1,3 @@
+{
+  "app": "pnpm babel-node -x .ts stack"
+}

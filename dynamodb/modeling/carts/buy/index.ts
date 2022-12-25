@@ -9,12 +9,7 @@ const itemsTable = process.env['ITEMS_TABLE'];
 const itemsByUserName = process.env['ITEMS_BY_USERNAME_INDEX'];
 const client = new DynamoDBClient({});
 
-/**
- *
- * @param {Record<string, string>} event
- * @returns
- */
-export async function handler(event) {
+export async function handler(event: Record<string, string>) {
   const { userName = 'peter' } = event;
 
   const queryByUserName = new QueryCommand({
