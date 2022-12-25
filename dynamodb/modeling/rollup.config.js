@@ -1,5 +1,6 @@
 const { babel } = require('@rollup/plugin-babel');
 const { nodeResolve } = require('@rollup/plugin-node-resolve');
+const terser = require('@rollup/plugin-terser');
 const path = require('path');
 
 /**
@@ -23,7 +24,8 @@ function bundleLambda(folder) {
         configFile: false,
         babelHelpers: 'bundled',
       }),
-      nodeResolve(),
+      nodeResolve({ extensions: ['.ts'] }),
+      terser(),
     ],
   };
 }
