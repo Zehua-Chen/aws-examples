@@ -3,6 +3,7 @@ import {
   GetItemCommand,
   QueryCommand,
 } from '@aws-sdk/client-dynamodb';
+import { dynamodbItemToItem } from '../core';
 
 const usersTable = process.env['USERS_TABLE'];
 const itemsTable = process.env['ITEMS_TABLE'];
@@ -38,10 +39,7 @@ export async function handler(event: Record<string, string>) {
     return;
   }
 
-  const items = queryByUserNameResponse.Items.map((item) => ({
-    itemName: item.ItemName.S,
-    count: item.Count.N,
-  }));
+  const items = queryByUserNameResponse.Items.map(dynamodbItemToItem);
 
   return {
     userName,
