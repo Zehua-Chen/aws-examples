@@ -1,7 +1,11 @@
-import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
+import {
+  DynamoDBClient,
+  BatchWriteItemCommand,
+} from '@aws-sdk/client-dynamodb';
+import { userToDynamoDBItem, itemToDynamoDBItem } from '../core';
 
-const usersTable = process.env['USERS_TABLE'];
-const itemsTable = process.env['ITEMS_TABLE'];
+const usersTable = process.env['USERS_TABLE']!;
+const itemsTable = process.env['ITEMS_TABLE']!;
 const client = new DynamoDBClient({});
 
 interface User {
@@ -16,38 +20,28 @@ interface Item {
   userName: string;
 }
 
-async function addUser(user: User) {
-  const command = new PutItemCommand({
-    TableName: usersTable,
-    Item: {
-      UserName: {
-        S: user.userName,
-      },
-      PaymentMethod: {
-        S: user.paymentMethod,
-      },
+async function addUsers(users: User[]) {
+  const command = new BatchWriteItemCommand({
+    RequestItems: {
+      [usersTable]: users.map((user) => ({
+        PutRequest: {
+          Item: userToDynamoDBItem(user),
+        },
+      })),
     },
   });
 
   await client.send(command);
 }
 
-async function addItem(item: Item) {
-  const command = new PutItemCommand({
-    TableName: itemsTable,
-    Item: {
-      PurchaseID: {
-        S: item.purchaseID,
-      },
-      UserName: {
-        S: item.userName,
-      },
-      ItemName: {
-        S: item.itemName,
-      },
-      Count: {
-        N: `${item.count}`,
-      },
+async function addItems(items: Item[]) {
+  const command = new BatchWriteItemCommand({
+    RequestItems: {
+      [itemsTable]: items.map((item) => ({
+        PutRequest: {
+          Item: itemToDynamoDBItem(item),
+        },
+      })),
     },
   });
 
@@ -55,29 +49,31 @@ async function addItem(item: Item) {
 }
 
 export async function handler(event: unknown) {
-  await addUser({ userName: 'peter', paymentMethod: 'Paypal' });
-  await addUser({ userName: 'jackson', paymentMethod: 'Visa' });
+  await addUsers([
+    { userName: 'jackson', paymentMethod: 'Visa' },
+    { userName: 'peter', paymentMethod: 'Paypal' },
+  ]);
 
-  await addItem({
-    purchaseID: '0',
-    userName: 'peter',
-    itemName: 'Watermelon',
-    count: 1,
-  });
-
-  await addItem({
-    purchaseID: '1',
-    userName: 'peter',
-    itemName: 'Pear',
-    count: 1,
-  });
-
-  await addItem({
-    purchaseID: '2',
-    userName: 'jackson',
-    itemName: 'Pear',
-    count: 1,
-  });
+  await addItems([
+    {
+      purchaseID: '0',
+      userName: 'peter',
+      itemName: 'Watermelon',
+      count: 1,
+    },
+    {
+      purchaseID: '1',
+      userName: 'peter',
+      itemName: 'Pear',
+      count: 1,
+    },
+    {
+      purchaseID: '2',
+      userName: 'jackson',
+      itemName: 'Pear',
+      count: 1,
+    },
+  ]);
 
   return {
     statusCode: '200',
