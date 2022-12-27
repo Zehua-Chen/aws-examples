@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "build": "rollup -c",
-    "zip": "zip -j lambda.zip out/index.js out/index.js.map"
+    "build": "webpack -c webpack.config.js",
+    "zip": "zip -j lambda.zip out/index.cjs out/index.cjs.map"
   },
   "dependencies": {}
 }
