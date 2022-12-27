@@ -1,5 +1,10 @@
-import { handler } from './handler.js';
+import { add } from './math';
 
-handler({}, {})
-  .then((value) => console.log(value))
-  .catch((error) => console.error(error));
+interface Event {}
+interface Context {}
+
+export async function handler(event: Event, context: Context): Promise<any> {
+  const result = add(1, 2);
+  console.log(`1 + 2 = ${result}`);
+  return result;
+}
