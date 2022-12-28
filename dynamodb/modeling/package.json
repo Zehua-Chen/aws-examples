@@ -2,7 +2,7 @@
   "name": "dynamodb-modeling",
   "scripts": {
     "synth": "cdk synth",
-    "build": "rollup -c"
+    "build": "gulp build"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.238.0"

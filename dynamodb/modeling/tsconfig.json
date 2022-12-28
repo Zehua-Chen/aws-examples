@@ -2,6 +2,10 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "",
-    "noEmit": true
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "carts/*": ["carts/*"]
+    }
   }
 }

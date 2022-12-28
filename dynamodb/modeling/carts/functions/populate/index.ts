@@ -2,7 +2,7 @@ import {
   DynamoDBClient,
   BatchWriteItemCommand,
 } from '@aws-sdk/client-dynamodb';
-import { userToDynamoDBItem, itemToDynamoDBItem } from '../core';
+import { userToDynamoDBItem, itemToDynamoDBItem } from '../../core';
 
 const usersTable = process.env['USERS_TABLE']!;
 const itemsTable = process.env['ITEMS_TABLE']!;

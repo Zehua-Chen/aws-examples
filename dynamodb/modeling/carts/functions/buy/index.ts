@@ -3,7 +3,7 @@ import {
   GetItemCommand,
   QueryCommand,
 } from '@aws-sdk/client-dynamodb';
-import { dynamodbItemToItem } from '../core';
+import { dynamodbItemToItem } from 'carts/core';
 
 const usersTable = process.env['USERS_TABLE'];
 const itemsTable = process.env['ITEMS_TABLE'];

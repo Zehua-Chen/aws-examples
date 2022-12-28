@@ -36,6 +36,7 @@ class ShoppingCarts extends Construct {
       environment: {
         USERS_TABLE: users.tableName,
         ITEMS_TABLE: items.tableName,
+        NODE_OPTIONS: '--enable-source-maps',
       },
     });
 
@@ -50,6 +51,7 @@ class ShoppingCarts extends Construct {
         USERS_TABLE: users.tableName,
         ITEMS_TABLE: items.tableName,
         ITEMS_BY_USERNAME_INDEX: 'ByUserName',
+        NODE_OPTIONS: '--enable-source-maps',
       },
     });
 
