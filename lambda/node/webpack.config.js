@@ -1,8 +1,9 @@
 import * as path from 'path';
 
 export default {
+  target: 'node',
   mode: 'production',
-  entry: './index.ts',
+  entry: path.resolve('index.ts'),
   output: {
     filename: 'index.cjs',
     path: path.join(path.dirname(new URL(import.meta.url).pathname), 'out'),
